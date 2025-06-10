@@ -35,5 +35,5 @@ Disponibilidade no github 1 ponto
 
 Trabalhos iguais terão notas zero em todos os itens.
 
-### Problema a ser analizado:
+### Problema a ser analisado:
 Verificação de Números Perfeitos ou Amigáveis em Intervalos Grandes
