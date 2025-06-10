@@ -42,6 +42,9 @@ Verificação de Números Perfeitos ou Amigáveis em Intervalos Grandes
 
 ## Divisão inicial de tarefas:
 Código sequencial - 
+
 Código paralelo - 
+
 Código distribuído - Janderson Silva
+
 Relatório técnico - 
