@@ -1,3 +1,4 @@
+
 # Sistemas-Distribuidos
 
 ## Descrição do Trabalho Final
@@ -26,14 +27,21 @@ As apresentações serão de 15 a 20 minutos por grupo e ser conduzido por todos
 
 Critérios de Avaliação
 
-Código Paralelo/Distribuído 4 pontos (executando corretamente com threds ou sockets/rmi)
+Código Paralelo/Distribuído 4 pontos (executando corretamente com threads ou sockets/RMI)
 Código Sequencial 1 ponto (executando corretamente)
 Se todos do grupo apresentarem 2 pontos
 Pergunta da sala 1 ponto
 Qualidade dos códigos comentados 1 ponto (a critério do professor)
-Disponibilidade no github 1 ponto
+Disponibilidade no GitHub 1 ponto
 
 Trabalhos iguais terão notas zero em todos os itens.
 
 ### Problema a ser analisado:
 Verificação de Números Perfeitos ou Amigáveis em Intervalos Grandes
+
+
+## Divisão inicial de tarefas:
+Código sequencial - 
+Código paralelo - 
+Código distribuído - Janderson Silva
+Relatório técnico - 
