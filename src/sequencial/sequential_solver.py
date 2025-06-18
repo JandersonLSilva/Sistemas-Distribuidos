@@ -9,11 +9,16 @@ def getDivisorSum(n):
             
     return sum
 
-nums = [3, 6, 8, 254, 24, 496, 8128, 444, 234, 678, 999]
-
-for num in nums:
-    divisorSum = getDivisorSum(num)
-    isPerfect = divisorSum == num
+def getFriendsNumbers(numsObj):
+    nums = []
     
-    print(f"Número {num} é {"PERFEITO" if isPerfect else "imperfeito"} pois a soma dos divisores dá: {divisorSum}")
+    # retornar um array [[6, 8], [4, 9], [4, 9, 76]]
+        
 
+nums = [3, 6, 8, 254, 24, 496, 8128, 444, 234, 678, 999]
+numsObj =  map(lambda n: {'number': n, 'divisorSum': getDivisorSum(n)}, nums)
+
+for numObj in numsObj:
+    isPerfect = numObj['number'] == numObj['divisorSum']
+    
+    print(f"Número {numObj['number']} é {"PERFEITO" if isPerfect else "imperfeito"} pois a soma dos divisores dá: {numObj['divisorSum']}")
