@@ -1,4 +1,5 @@
 import math
+import os
 
 def getDivisorSum(n):
     half = math.floor(n / 2)
@@ -27,14 +28,22 @@ def getFriendsNumbers(numsObj):
         if(len(searchNums) > 0): searchNums.pop(0)
     
     return friendNumbers
-        
-nums = [3, 6, 8, 254, 24, 496, 8128, 444, 234, 678, 999, 220, 284]
+  
+file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'test_1.txt')    
+nums = []
+
+with open(file_path, 'r') as arquivo:
+    for linha in arquivo:
+        numero = int(linha.strip())
+        nums.append(numero)
+
 numsObj =  list(map(lambda n: {'number': n, 'divisorSum': getDivisorSum(n)}, nums))
 
 for numObj in numsObj:
     isPerfect = numObj['number'] == numObj['divisorSum']
     
-    print(f"Número {numObj['number']} é {"PERFEITO" if isPerfect else "imperfeito"} pois a soma dos divisores dá: {numObj['divisorSum']}")
+    if(isPerfect):
+        print(f"Número {numObj['number']} é PERFEITO pois a soma dos divisores dá: {numObj['divisorSum']}")
     
 friendNumbers = getFriendsNumbers(numsObj)
 
