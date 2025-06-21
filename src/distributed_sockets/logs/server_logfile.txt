@@ -1,0 +1,43 @@
+[220, 284, 1210, 640, 7817, 5010, 2924, 7082, 2620, 8031, 3382, 28, 3058, 2315, 496, 9819, 9080, 1463, 8128, 1184, 33550336, 1207, 33550337, 33550338]
+[[220, 284], [1210, 640], [7817, 5010], [2924, 7082], [2620, 8031], [3382, 28], [3058, 2315], [496, 9819], [9080, 1463], [8128, 1184], [33550336, 1207], [33550337, 33550338]]
+O Servidor está escutando no endereço 127.0.0.1:50000
+Conexão aceita com o cliente: ('127.0.0.1', 34408)
+Enviando para o cliente ('127.0.0.1', 34408) a fatia: [220, 284]
+Finalizando a conexão com o cliente: ('127.0.0.1', 34408)
+Conexão aceita com o cliente: ('127.0.0.1', 34410)
+Enviando para o cliente ('127.0.0.1', 34410) a fatia: [1210, 640]
+Conexão aceita com o cliente: ('127.0.0.1', 34409)
+Finalizando a conexão com o cliente: ('127.0.0.1', 34410)
+Enviando para o cliente ('127.0.0.1', 34409) a fatia: [7817, 5010]
+Finalizando a conexão com o cliente: ('127.0.0.1', 34409)
+Conexão aceita com o cliente: ('127.0.0.1', 34413)
+Enviando para o cliente ('127.0.0.1', 34413) a fatia: [2924, 7082]
+Conexão aceita com o cliente: ('127.0.0.1', 34412)
+Finalizando a conexão com o cliente: ('127.0.0.1', 34413)
+Enviando para o cliente ('127.0.0.1', 34412) a fatia: [2620, 8031]
+Conexão aceita com o cliente: ('127.0.0.1', 34411)
+Conexão aceita com o cliente: ('127.0.0.1', 34414)
+Enviando para o cliente ('127.0.0.1', 34411) a fatia: [3382, 28]
+Finalizando a conexão com o cliente: ('127.0.0.1', 34412)
+Finalizando a conexão com o cliente: ('127.0.0.1', 34411)
+Enviando para o cliente ('127.0.0.1', 34414) a fatia: [3058, 2315]
+Conexão aceita com o cliente: ('127.0.0.1', 34415)
+Conexão aceita com o cliente: ('127.0.0.1', 34416)
+Enviando para o cliente ('127.0.0.1', 34415) a fatia: [496, 9819]
+Finalizando a conexão com o cliente: ('127.0.0.1', 34414)
+Enviando para o cliente ('127.0.0.1', 34416) a fatia: [9080, 1463]
+Finalizando a conexão com o cliente: ('127.0.0.1', 34415)
+Finalizando a conexão com o cliente: ('127.0.0.1', 34416)
+Conexão aceita com o cliente: ('127.0.0.1', 34417)
+Enviando para o cliente ('127.0.0.1', 34417) a fatia: [8128, 1184]
+Finalizando a conexão com o cliente: ('127.0.0.1', 34417)
+Conexão aceita com o cliente: ('127.0.0.1', 34418)
+Enviando para o cliente ('127.0.0.1', 34418) a fatia: [33550336, 1207]
+Conexão aceita com o cliente: ('127.0.0.1', 34419)
+Enviando para o cliente ('127.0.0.1', 34419) a fatia: [33550337, 33550338]
+Aguardando a finalização de todas as threads...
+Finalizando a conexão com o cliente: ('127.0.0.1', 34418)
+Finalizando a conexão com o cliente: ('127.0.0.1', 34419)
+
+# ---- RESULTADO FINAL DO PROBLEMA ---- #
+[[220, False], [284, False], [1210, False], [640, False], [7817, False], [5010, False], [2924, False], [7082, False], [2620, False], [8031, False], [3382, False], [28, True], [3058, False], [2315, False], [496, True], [9819, False], [9080, False], [1463, False], [8128, True], [1184, False], [33550336, True], [1207, False], [33550337, False], [33550338, False]]

@@ -1,0 +1,4 @@
+Cliente conectado ao servidor. Aguardando a fatia a ser resolvida...
+Resolvendo a fatia de dados: [8128, 1184]
+Enviando resultados: [(8128, True), (1184, False)]
+Resolução do problema concluído e enviado. Encerrando.
