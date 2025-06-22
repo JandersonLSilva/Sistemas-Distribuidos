@@ -4,7 +4,9 @@ import json
 
 def client_socket():
   """
-  
+  Função que faz a conexão com o servidor e realiza a tarefa passada.
+  Cria um socket para conexão e recebe os dados em json decide qual função deverá executar
+  e envia os dados verificados de volta para o servidor.
   """
 
   try:
@@ -16,17 +18,25 @@ def client_socket():
       bytes_recv_data = client_socket.recv(4096)
       if not bytes_recv_data:
         print("Não houve envio de dados por parte do servidor. Encerrando.")
-        exit()
+        exit(1)
       
       chunk = json.loads(bytes_recv_data.decode('utf-8'))
       print(f"Resolvendo a fatia de dados: {chunk}")
 
+      print(chunk)
+      
       results = []
-      for value in chunk:
-        results.append(check_perfect_number(value))
+      if chunk["task_type"] == 'perfects':
+        for value in chunk['payload']:
+          results.append(check_perfect_number(value))
+
+      elif chunk['task_type'] == 'friendly':
+        for value in chunk['payload']:
+          results.append(check_friends_numbers(value[0], value[1]))
 
       print(f"Enviando resultados: {results}")
-      bytes_results = json.dumps(results).encode('utf-8')
+      chunk["payload"] = results
+      bytes_results = json.dumps(chunk).encode('utf-8')
       client_socket.sendall(bytes_results)
       
       print("Resolução do problema concluído e enviado. Encerrando.")
@@ -34,7 +44,7 @@ def client_socket():
     print(f"Ocorreu um erro: {e}")
 
 
-# ---- FUNÇÕES ---- #
+# ---- FUNÇÕES COM AS RESOLUÇÕES DOS PROBLEMAS ---- #
 
 def find_divisors(n):
   """
@@ -55,8 +65,8 @@ def check_perfect_number(n):
     Chama a função 'find_divisors' e soma os números
     Verifica se a soma é igual ou não ao 'n'
   """
-  soma = sum(find_divisors(n))
-  if soma == n:
+  sum_dv = sum(find_divisors(n))
+  if sum_dv == n:
     return (n, True)    # número PERFEITO
   else:
     return (n, False)   # número NÃO PERFEITO
@@ -69,12 +79,13 @@ def check_friends_numbers(a, b):
     Soma os divisores de um número 'b'
     Compara ambas as somas para ver se são iguais (amigáveis) ou não
   """
-  soma_a = sum(find_divisors(a))
-  soma_b = sum(find_divisors(b))
-  if soma_a == b and soma_b == a:
-    ((a, b), True)    # números AMIGÁVEIS
+  sum_a = sum(find_divisors(a))
+  sum_b = sum(find_divisors(b))
+  if sum_a == b and sum_b == a:
+    return ((a, b), True)    # números AMIGÁVEIS
   else:
-    ((a, b), False)   # números NÃO AMIGÁVEIS
+    return ((a, b), False)   # números NÃO AMIGÁVEIS
+
 
 # ---- BLOCO DE EXECUÇÃO PRINCIPAL DO PROGRAMA ---- #
 
