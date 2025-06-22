@@ -1,3 +1,54 @@
+# ---- FUNÇÕES USADAS NA COMUNICAÇÃO ---- #
+
+def send_message(sock, message):
+    """
+    Função para o envio de mensagens pelo socket
+    Converte o dicionário para uma string JSON, depois para bytes e envia a mensagem 
+    com um cabeçalho de tamanho para poder enviar dados que são muitos grandes.
+
+    Keywords arguments:
+      sock -- socket de comunicação
+      message_dict -- mensagem que irá ser enviado
+    Returns:
+      data[list]: lista com os dados de cada fatia
+    """
+    # 
+    message_bytes = json.dumps(message).encode('utf-8')
+
+    # Converte o tamanho para 4 bytes e define a ordem dos bytes
+    header = len(message_bytes).to_bytes(4, byteorder='big')
+    
+    sock.sendall(header)
+    sock.sendall(message_bytes)
+
+def receive_message(sock):
+    """
+    Recebe uma mensagem com cabeçalho de tamanho e a retorna.
+
+    Keywords arguments:
+      sock -- socket de comunicação
+    Returns:
+      data[list]: lista com os dados de cada fatia
+    """
+    # Primeiro lê o cabeçalho de 4 bytes
+    header_data = sock.recv(4)
+    if not header_data:
+      return None
+    
+    # Converte os 4 bytes de volta para um inteiro
+    message_length = int.from_bytes(header_data, byteorder='big')
+    
+    # Lê até todos os dados tiverem sido recebidos e passados para 'received_data'
+    received_data = b''
+    while len(received_data) < message_length:
+      chunk = sock.recv(min(message_length - len(received_data), 4096))
+      if not chunk:
+        raise ConnectionError("Conexão perdida ao receber dados da mensagem.")
+      received_data += chunk
+      
+    return json.loads(received_data.decode('utf-8'))
+
+
 # ---- LEITURA DO ARQUIVO COM OS DADOS ---- #
 from pathlib import Path
 
@@ -64,16 +115,11 @@ def handle_client(conn, addr):
     
     print(f"Enviando para o cliente {addr} a fatia: {task_send}")
 
-    # Converte a lista para o formato json e faz o encode dos dados em binário para serem enviados
-    bytes_data = json.dumps(task_send).encode('utf-8')
-    conn.sendall(bytes_data)
+    # Envia os dados para o cliente
+    send_message(conn, task_send)
 
-    # Espera os dados resolvidos, serem enviados ao servidor, assim realizando a decodificação e conversão para lista
-    bytes_data = conn.recv(4096)
-    if not bytes_data:
-      raise ConnectionError(f"O cliente {addr} se desconectou antes de resolver a fatia {task_send}!")
-    
-    recv_data = json.loads(bytes_data.decode('utf-8'))
+    # Espera os dados resolvidos serem enviados ao servidor
+    recv_data = receive_message(conn)
 
     with CHUNK_LOCK:
       # Junta os elementos já existentes ao recebidos

@@ -2,9 +2,9 @@ import subprocess
 import sys
 import time
 
-NUM_CLIENTS = 12                    # Quantidade de clientes
-SERVER_SCRIPT_NAME = 'server.py'    # Nome do arquivo python do servidor
-CLIENT_SCRIPT_NAME = 'client.py'    # Nome do arquivo python do cliente
+NUM_CLIENTS = 12                      # Quantidade de clientes
+SERVER_SCRIPT_NAME = 'server.py'      # Nome do arquivo python do servidor
+CLIENT_SCRIPT_NAME = 'client.py'      # Nome do arquivo python do cliente
 
 """
 Script que abre váriios processos, um para o servidor e os outros para o cliente.
@@ -25,7 +25,7 @@ server_logfile = open('logs/server_logfile.txt', 'w', encoding='utf-8')
 
 try:
   server_process = subprocess.Popen(
-    [python_exe, '-u', SERVER_SCRIPT_NAME, str(NUM_CLIENTS)],
+    [python_exe, '-u', SERVER_SCRIPT_NAME, str(NUM_CLIENTS), "minimal_test.txt"],
     stdout=server_logfile,
     stderr=subprocess.STDOUT
   )

@@ -1,3 +1,54 @@
+# ---- FUNÇÕES USADAS NA COMUNICAÇÃO ---- #
+
+def send_message(sock, message):
+    """
+    Função para o envio de mensagens pelo socket
+    Converte o dicionário para uma string JSON, depois para bytes e envia a mensagem 
+    com um cabeçalho de tamanho para poder enviar dados que são muitos grandes.
+
+    Keywords arguments:
+      sock -- socket de comunicação
+      message_dict -- mensagem que irá ser enviado
+    Returns:
+      data[list]: lista com os dados de cada fatia
+    """
+    # 
+    message_bytes = json.dumps(message).encode('utf-8')
+
+    # Converte o tamanho para 4 bytes e define a ordem dos bytes
+    header = len(message_bytes).to_bytes(4, byteorder='big')
+    
+    sock.sendall(header)
+    sock.sendall(message_bytes)
+
+def receive_message(sock):
+    """
+    Recebe uma mensagem com cabeçalho de tamanho e a retorna.
+
+    Keywords arguments:
+      sock -- socket de comunicação
+    Returns:
+      data[list]: lista com os dados de cada fatia
+    """
+    # Primeiro lê o cabeçalho de 4 bytes
+    header_data = sock.recv(4)
+    if not header_data:
+      return None
+    
+    # Converte os 4 bytes de volta para um inteiro
+    message_length = int.from_bytes(header_data, byteorder='big')
+    
+    # Lê até todos os dados tiverem sido recebidos e passados para 'received_data'
+    received_data = b''
+    while len(received_data) < message_length:
+      chunk = sock.recv(min(message_length - len(received_data), 4096))
+      if not chunk:
+        raise ConnectionError("Conexão perdida ao receber dados da mensagem.")
+      received_data += chunk
+      
+    return json.loads(received_data.decode('utf-8'))
+
+
 # ---- CONFIGURAÇÃO E COMUNICAÇÃO ENTRE O SERVIDOR E CLIENTE VIA SOCKET ---- #
 import socket
 import json
@@ -14,16 +65,9 @@ def client_socket():
       client_socket.connect((HOST, PORT))
       print("Cliente conectado ao servidor. Aguardando a fatia a ser resolvida...")
 
-      # Recebendo os dados json codificados e os convertendo para uma lista
-      bytes_recv_data = client_socket.recv(4096)
-      if not bytes_recv_data:
-        print("Não houve envio de dados por parte do servidor. Encerrando.")
-        exit(1)
-      
-      chunk = json.loads(bytes_recv_data.decode('utf-8'))
+      # Recebendo os dados json
+      chunk = receive_message(client_socket)
       print(f"Resolvendo a fatia de dados: {chunk}")
-
-      print(chunk)
       
       results = []
       if chunk["task_type"] == 'perfects':
@@ -36,8 +80,8 @@ def client_socket():
 
       print(f"Enviando resultados: {results}")
       chunk["payload"] = results
-      bytes_results = json.dumps(chunk).encode('utf-8')
-      client_socket.sendall(bytes_results)
+
+      send_message(client_socket, chunk)
       
       print("Resolução do problema concluído e enviado. Encerrando.")
   except Exception as e:
