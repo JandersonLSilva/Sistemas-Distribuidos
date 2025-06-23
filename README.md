@@ -1,6 +1,11 @@
 
 # Sistemas-Distribuidos
 
+## Como rodar
+
+Executar o scirpt `plot_generator.py` para executar os scripts para cada abordagem e gerar os gráficos para a análise.
+
+
 ## Descrição do Trabalho Final
 
 Trabalho Prático

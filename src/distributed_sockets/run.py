@@ -1,6 +1,14 @@
-import subprocess
+import os
 import sys
 import time
+import subprocess
+from pathlib import Path
+
+# Define o caminho base do projeto
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+SCRIPT_DIR = 'src/distributed_sockets/'
+
+print(Path(__file__).resolve().parent.parent.parent)
 
 NUM_CLIENTS = 12                      # Quantidade de clientes
 SERVER_SCRIPT_NAME = 'server.py'      # Nome do arquivo python do servidor
@@ -20,12 +28,12 @@ python_exe = sys.executable
 client_processes = []
 
 print("# ---- INICIANDO O SERVIDOR ---- #")
-
-server_logfile = open('logs/server_logfile.txt', 'w', encoding='utf-8')
+os.makedirs(BASE_DIR / SCRIPT_DIR / "logs", exist_ok=True)  # Caso não exista o diretório
+server_logfile = open(BASE_DIR / SCRIPT_DIR / 'logs/server_logfile.txt', 'w', encoding='utf-8')
 
 try:
   server_process = subprocess.Popen(
-    [python_exe, '-u', SERVER_SCRIPT_NAME, str(NUM_CLIENTS), "minimal_test.txt"],
+    [python_exe, '-u', BASE_DIR / SCRIPT_DIR / SERVER_SCRIPT_NAME, str(NUM_CLIENTS), "minimal_test.txt"],
     stdout=server_logfile,
     stderr=subprocess.STDOUT
   )
@@ -34,19 +42,19 @@ except Exception as e:
   sys.exit(1)
   
 
-print("\nAguardando 2 segundos para o servidor inicializar...")
-time.sleep(2)
+print("\nAguardando 1 segundos para o servidor inicializar...")
+time.sleep(1)
 
 print(f"\n# ---- INICIANDO {NUM_CLIENTS} CLIENTES ---- #")
 client_logfiles = []
 
 while len(client_processes) < NUM_CLIENTS:
-  client_logfile = open(f'logs/client_logfile_{len(client_processes)+1}.txt', 'w', encoding='utf-8')
+  client_logfile = open(BASE_DIR / SCRIPT_DIR / f'logs/client_logfile_{len(client_processes)+1}.txt', 'w', encoding='utf-8')
   client_logfiles.append(client_logfile)
   try: 
     # Inicia cada cliente e seu próprio processo
     client_process = subprocess.Popen(
-      [python_exe, '-u', CLIENT_SCRIPT_NAME],
+      [python_exe, '-u', BASE_DIR / SCRIPT_DIR / CLIENT_SCRIPT_NAME],
       stdout=client_logfile,
       stderr=subprocess.STDOUT
     )

@@ -52,7 +52,7 @@ def receive_message(sock):
 # ---- LEITURA DO ARQUIVO COM OS DADOS ---- #
 from pathlib import Path
 
-def read_data():
+def read_data(data_file):
   """
   Lê um arquivo com dados de teste e extrai todas as linhas que contém somente números.
   Usa a compressão de lista para filtrar e aplicar uma modificação ao elemento
@@ -63,15 +63,12 @@ def read_data():
              Retorna uma lista vazia caso o arquivo não seja encontrado
   """
 
-  # Resolução do caminho para o arquivo contendo valores para os testes
-  file_path = (Path(__file__).parent / '..' / '..' / 'data' / data_file).resolve()
-
   try:
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(BASE_DIR / data_file, 'r', encoding='utf-8') as file:
       return [int(line.strip()) for line in file if line.strip().isdigit()]
 
   except FileNotFoundError:
-    print(f"Arquivo não encontrado em: {file_path}")
+    print(f"Arquivo não encontrado em: {BASE_DIR / SCRIPT_DIR / data_file}")
     return []
 
 
@@ -197,9 +194,13 @@ from math import ceil, floor
 from sys import argv
 from itertools import combinations
 
-data_file = argv[2] if len(argv) > 2 else 'minimal_test.txt'    # Arquivo com os dados
-data = read_data()                                              # Lista de valores de teste
-num_chunks = int(argv[1]) if len(argv) > 1 else 8               # Quantidade de fatias (ou seja a quantidade de threads) [argumento 1 ou um valor default]
+# Define o caminho base do projeto
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+SCRIPT_DIR = 'src/distributed_sockets/'
+
+data_file = argv[2] if len(argv) > 2 else 'minimal_test.txt'      # Arquivo com os dados
+data = read_data("data/" + data_file)                             # Lista de valores de teste
+num_chunks = int(argv[1]) if len(argv) > 1 else 8                 # Quantidade de fatias (ou seja a quantidade de threads) [argumento 1 ou um valor default]
 
 data_pair = list(combinations(data, 2))
 
@@ -231,5 +232,5 @@ print(f"AMIGÁVEIS: {final_data['friendly']}")
 final_data['perfects'] = [index[0] for index in final_data['perfects'] if index[1]]
 final_data['friendly'] = [index[0] for index in final_data['friendly'] if index[1]]
 
-with open('results.txt', 'w', encoding='utf-8') as results:
+with open(BASE_DIR / SCRIPT_DIR / 'results.txt', 'w', encoding='utf-8') as results:
   results.write(f"NÚMEROS PERFEITOS: {final_data['perfects']}\nNÚMEROS AMIGÁVEIS: {final_data['friendly']}")
