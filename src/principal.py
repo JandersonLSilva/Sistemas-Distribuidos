@@ -1,19 +1,21 @@
 import time
 import os
-import sys 
+import sys
 import subprocess
 from pathlib import Path
 
-def execute_script(file_path):
-    """Executa um script Python de um arquivo."""
+def execute_script_subprocess(file_path):
+    """Executa um script Python como um subprocesso e mede o tempo de execução."""
+    start_time = time.perf_counter()
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            code = file.read()
-        exec(code, globals())
+        subprocess.run([sys.executable, file_path], check=True)
     except FileNotFoundError:
         print(f"Arquivo {file_path} não encontrado.")
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         print(f"Erro ao executar {file_path}: {e}")
+    except Exception as e:
+        print(f"Erro inesperado ao executar {file_path}: {e}")
+    return time.perf_counter() - start_time
 
 def execute_distributed_scripts(base_dir, num_clients, data_file):
     """Executa o código distribuído com um servidor e múltiplos clientes."""
@@ -31,7 +33,7 @@ def execute_distributed_scripts(base_dir, num_clients, data_file):
         stdout=server_logfile,
         stderr=subprocess.STDOUT
     )
-    
+
     print("Aguardando o servidor inicializar...")
     time.sleep(2)  # Aguarda o servidor
 
@@ -70,16 +72,12 @@ def main():
 
     # Executa o script paralelo
     print("Executando o script paralelo...")
-    start_time = time.perf_counter()
-    execute_script(script_parallel)
-    parallel_time = time.perf_counter() - start_time
+    parallel_time = execute_script_subprocess(script_parallel)
     print(f"Tempo de execução do script paralelo: {parallel_time:.2f} segundos\n")
 
     # Executa o script sequencial
     print("Executando o script sequencial...")
-    start_time = time.perf_counter()
-    execute_script(script_sequential)
-    sequential_time = time.perf_counter() - start_time
+    sequential_time = execute_script_subprocess(script_sequential)
     print(f"Tempo de execução do script sequencial: {sequential_time:.2f} segundos\n")
 
     # Executa o código distribuído
