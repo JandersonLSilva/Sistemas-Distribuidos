@@ -15,7 +15,7 @@ IMG_BARRAS = BASE_DIR / "analysis/images/execution_times_graph.png"
 IMG_LINHA = BASE_DIR / "analysis/images/execution_times_graph_line.png"
 PDF_RELATORIO = BASE_DIR / "analysis/relatorio_resultados.pdf"
 
-# Nomes dos algoritmos e os caminhos dos seus scripts
+# Nomes dos algoritmos e os caminhos dos scripts
 scripts = {
     "Sockets Distribuidos": BASE_DIR / "src/distributed_sockets/run.py",
     "Threads Paralelas": BASE_DIR / "src/parallel_threads/parallel_solver.py",
@@ -131,6 +131,6 @@ def comparar_e_gerar_relatorio():
     gerar_graficos(resultados)  # Gera os gráficos com os resultados
     gerar_pdf(resultados)       # Gera o PDF com os resultados e os gráficos
 
-#Executa o algoritmo
+# Executa o algoritmo
 if __name__ == "__main__":
     comparar_e_gerar_relatorio()
