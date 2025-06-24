@@ -116,20 +116,11 @@ def gerar_pdf(resultados):
 
     c.save()  # Salva o PDF
 
-# Função principal que executa os scripts, coleta os dados e gera os relatórios
-def comparar_e_gerar_relatorio():
-    resultados = {}
-    for nome, caminho in scripts.items():
-        print(f"\nExecutando: {nome}")
-        dados = medir_execucao(str(caminho))  # Executa o script e coleta os dados dos algoritmos
-        resultados[nome] = dados
-        if dados["tempo"] is not None:
-            print(f"{nome}: {dados['tempo']:.6f} segundos")
-        else:
-            print(f"{nome}: falhou na execução")
-
+# Função principal que gera os gráficos e o PDF com base nos resultados fornecidos
+def comparar_e_gerar_relatorio(resultados):
     gerar_graficos(resultados)  # Gera os gráficos com os resultados
     gerar_pdf(resultados)       # Gera o PDF com os resultados e os gráficos
+
 
 # Executa o algoritmo
 if __name__ == "__main__":

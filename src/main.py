@@ -3,6 +3,16 @@ import os
 import sys
 import subprocess
 from pathlib import Path
+import sys
+from pathlib import Path
+
+# Adiciona o diretório do plot_generator ao sys.path
+BASE_DIR = Path(__file__).resolve().parent.parent  # Ajuste o caminho para o diretório base
+ANALYSIS_DIR = BASE_DIR / "analysis"
+sys.path.append(str(ANALYSIS_DIR))
+
+from plot_generator import comparar_e_gerar_relatorio  # Importa a função do gerador de relatórios
+
 
 def execute_script_subprocess(file_path):
     """Executa um script Python como um subprocesso e mede o tempo de execução."""
@@ -70,22 +80,28 @@ def main():
     script_sequential = os.path.join(base_dir, "sequencial", "sequential_solver.py")
     data_file = "minimal_test.txt"  # Nome do arquivo de dados
 
-    # Executa o script paralelo
+    # Coleta os tempos de execução
+    resultados = {}
+
     print("Executando o script paralelo...")
-    parallel_time = execute_script_subprocess(script_parallel)
-    print(f"Tempo de execução do script paralelo: {parallel_time:.2f} segundos\n")
+    resultados["Threads Paralelas"] = {
+        "tempo": execute_script_subprocess(script_parallel)
+    }
 
-    # Executa o script sequencial
     print("Executando o script sequencial...")
-    sequential_time = execute_script_subprocess(script_sequential)
-    print(f"Tempo de execução do script sequencial: {sequential_time:.2f} segundos\n")
+    resultados["Sequencial"] = {
+        "tempo": execute_script_subprocess(script_sequential)
+    }
 
-    # Executa o código distribuído
     print("Executando o código distribuído...")
     start_time = time.perf_counter()
     execute_distributed_scripts(base_dir, num_clients=12, data_file=data_file)
-    distributed_time = time.perf_counter() - start_time
-    print(f"Tempo de execução do código distribuído: {distributed_time:.2f} segundos\n")
+    resultados["Sockets Distribuidos"] = {
+        "tempo": time.perf_counter() - start_time
+    }
+
+    # Gera o relatório com os resultados
+    comparar_e_gerar_relatorio(resultados)
 
 if __name__ == "__main__":
     main()
